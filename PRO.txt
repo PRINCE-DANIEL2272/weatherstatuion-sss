@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Prince Weather Forecasting Station</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+body{
+background:linear-gradient(135deg,#050b18,#021c4a);
+font-family:Arial;
+color:white;
+margin:0;
+}
+
+header{
+text-align:center;
+padding:20px;
+font-size:34px;
+font-weight:bold;
+background:rgba(0,0,0,0.3);
+}
+
+#clock{
+font-size:16px;
+margin-top:5px;
+color:#00eaff;
+}
+
+.dashboard{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+padding:20px;
+}
+
+.card{
+background:rgba(255,255,255,0.08);
+border-radius:15px;
+padding:20px;
+backdrop-filter:blur(10px);
+cursor:pointer;
+transition:0.3s;
+text-align:center;
+}
+
+.card:hover{
+transform:scale(1.05);
+box-shadow:0 0 15px #00eaff;
+}
+
+.card.active{
+border:2px solid #00eaff;
+}
+
+.graph{
+padding:20px;
+}
+
+section{
+padding:20px;
+}
+
+iframe{
+border:none;
+border-radius:12px;
+}
+
+img{
+width:200px;
+border-radius:10px;
+margin:10px;
+transition:0.3s;
+}
+
+img:hover{
+transform:scale(1.05);
+}
+
+.gallery{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.contact{
+background:#06142c;
+padding:20px;
+border-radius:12px;
+margin:20px;
+}
+
+footer{
+text-align:center;
+padding:15px;
+color:gray;
+font-size:14px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+🌍 Prince Weather Forecasting Station
+<div id="clock"></div>
+</header>
+
+<div class="dashboard">
+
+<div class="card active" onclick="showGraph('temp', event)">
+<h2>🌡 Temperature</h2>
+<p>View weekly trend</p>
+</div>
+
+<div class="card" onclick="showGraph('humidity', event)">
+<h2>💧 Humidity</h2>
+<p>View weekly trend</p>
+</div>
+
+<div class="card" onclick="showGraph('wind', event)">
+<h2>🌬 Wind Speed</h2>
+<p>View weekly trend</p>
+</div>
+
+</div>
+
+<div class="graph">
+<canvas id="weatherChart"></canvas>
+</div>
+
+<section>
+
+<h2>📡 Weather Station Map (Nairobi)</h2>
+
+<iframe
+width="100%"
+height="400"
+src="https://maps.google.com/maps?q=Nairobi%20meteorological%20station&z=10&output=embed">
+</iframe>
+
+</section>
+
+<section>
+
+<h2>🛰 Weather Instruments</h2>
+
+<div class="gallery">
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Liquid-in-glass_thermometer.jpg">
+<img src="https://upload.wikimedia.org/wikipedia/commons/2/2c/Anemometer.jpg">
+<img src="https://upload.wikimedia.org/wikipedia/commons/0/02/Rain_gauge.jpg">
+<img src="https://upload.wikimedia.org/wikipedia/commons/3/34/Hygrometer.jpg">
+<img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Weather_station.jpg">
+
+</div>
+
+</section>
+
+<section>
+
+<h2>⚠ Weather Safety Measures</h2>
+
+<ul>
+<li>Stay indoors during thunderstorms</li>
+<li>Avoid open fields during lightning</li>
+<li>Secure outdoor objects during strong winds</li>
+<li>Monitor rainfall during flood risk</li>
+<li>Follow official weather alerts</li>
+</ul>
+
+</section>
+
+<section class="contact">
+
+<h2>📞 Global Weather Contacts</h2>
+
+<p>Kenya Meteorological Department</p>
+<p>NOAA – USA</p>
+<p>UK Met Office</p>
+<p>Japan Meteorological Agency</p>
+<p>Australian Bureau of Meteorology</p>
+
+</section>
+
+<footer>
+© 2026 Prince Weather Station
+</footer>
+
+<script>
+
+const ctx=document.getElementById("weatherChart")
+
+let chart=new Chart(ctx,{
+type:'line',
+data:{
+labels:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
+datasets:[{
+label:"Temperature (°C)",
+data:[22,23,24,26,27,25,24],
+borderColor:"#00eaff",
+backgroundColor:"rgba(0,234,255,0.2)",
+fill:true,
+tension:0.4
+}]
+}
+})
+
+function showGraph(type,event){
+
+document.querySelectorAll('.card').forEach(c=>c.classList.remove('active'))
+event.currentTarget.classList.add('active')
+
+let data,label,color
+
+if(type=="temp"){
+data=[22,23,24,26,27,25,24]
+label="Temperature (°C)"
+color="#00eaff"
+}
+
+if(type=="humidity"){
+data=[60,63,65,70,68,66,64]
+label="Humidity (%)"
+color="#00ff9d"
+}
+
+if(type=="wind"){
+data=[10,14,12,16,18,15,13]
+label="Wind Speed (km/h)"
+color="#ffaa00"
+}
+
+chart.data.datasets[0].data=data
+chart.data.datasets[0].label=label
+chart.data.datasets[0].borderColor=color
+chart.update()
+
+}
+
+// Live Clock
+setInterval(()=>{
+let now=new Date()
+document.getElementById("clock").innerText=now.toLocaleTimeString()
+},1000)
+
+</script>
+
+</body>
+</html>
